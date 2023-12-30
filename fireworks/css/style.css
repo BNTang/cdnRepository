@@ -362,3 +362,27 @@ body {
     transition-timing-function: ease-out;
     transition-duration: 0.4s;
 }
+
+#myAudio {
+    display: none;
+}
+body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+}
+
+#playButton {
+    max-width: 100%;
+    height: auto;
+    cursor: pointer;
+}
+
+#myAudio {
+    display: none;
+}
+.container {
+    display: none;
+}

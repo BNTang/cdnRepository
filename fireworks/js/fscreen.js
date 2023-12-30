@@ -1,4 +1,6 @@
-(function (global) {
+// A manual UMD build of Fscreen: https://github.com/rafrex/fscreen
+
+(function(global) {
     'use strict';
 
     var key = {
@@ -17,7 +19,6 @@
     var ms = ['msFullscreenEnabled', 'msFullscreenElement', 'msRequestFullscreen', 'msExitFullscreen', 'MSFullscreenChange', 'MSFullscreenError'];
 
     // so it doesn't throw if no window or document
-    // The language of this project was translated into Chinese by Nianbroken
     var doc = typeof window !== 'undefined' && typeof window.document !== 'undefined' ? window.document : {};
 
     var vendor = 'fullscreenEnabled' in doc && Object.keys(key) || webkit[0] in doc && webkit || moz[0] in doc && moz || ms[0] in doc && ms || [];
@@ -41,13 +42,11 @@
         get fullscreenEnabled() {
             return Boolean(doc[vendor[key.fullscreenEnabled]]);
         },
-        set fullscreenEnabled(val) {
-        },
+        set fullscreenEnabled(val) {},
         get fullscreenElement() {
             return doc[vendor[key.fullscreenElement]];
         },
-        set fullscreenElement(val) {
-        },
+        set fullscreenElement(val) {},
         get onfullscreenchange() {
             return doc[('on' + vendor[key.fullscreenchange]).toLowerCase()];
         },

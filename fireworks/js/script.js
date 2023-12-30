@@ -6,7 +6,9 @@ console.clear();
 //读取/处理这个单独的文件，但不管怎样，它还是在这里:)
 
 //随机文字烟花内容，自定义文字烟花内容
-const randomWords = ['新年快乐(๑′ᴗ‵๑)', '(๑′ᴗ‵๑)❤', '万事如意 (๑′ᴗ‵๑)', '心想事成 (๑′ᴗ‵๑)', 'Happy New Year! (๑′ᴗ‵๑)'];
+const randomWords = ['2024', '新年快乐', '万事如意 (๑′ᴗ‵๑)', '心想事成 (๑′ᴗ‵๑)',
+    'Happy New Year!', '干吃不胖', '越来越美', '一直幸运', '每天开心',
+    '一生被爱', '都拥有'];
 
 const IS_MOBILE = window.innerWidth <= 640;
 const IS_DESKTOP = window.innerWidth > 800;
@@ -116,7 +118,7 @@ const store = {
     //当前上下文状态
     state: {
         // 将在init()中取消挂起
-        paused: true,
+        paused: false,
         soundEnabled: true,
         menuOpen: false,
         openHelpTopic: null,
@@ -2431,27 +2433,33 @@ const imageTemplateManager = {
     baseURL: 'https://cdn.jsdelivr.net/gh/BNTang/cdnRepository@45a794ce63e75dc0b108c2776528475cf3249a67/fireworks/images/template/',
     sources: [],
     preload() {
-        let i = 0;
+        let i = 1;
+        let max = 2;
         const allFilePromises = [];
         const load = () => {
+            if (i > max) return;
             const fileURL = this.baseURL + i + '.png';
             const promise = fetch(fileURL)
                 .then(response => {
-                    if (response.status >= 200 && response.status < 300) {
-                        return response;
+                    if (!response.ok) {
+                        throw new Error('Resource not found');
                     }
-                    const customError = new Error(response.statusText);
-                    customError.response = response;
-                    throw customError;
+                    return response.blob();
                 })
-                .then(response => response.blob())
                 .then(data => {
                     const image = new Image();
                     image.src = URL.createObjectURL(data);
                     this.sources.push(image);
                     i++;
-
                     load();
+                })
+                .catch(error => {
+                    // 如果资源未找到，就不再递归调用 load()
+                    if (error.message === 'Resource not found') {
+                        return;
+                    }
+                    // 如果是其他错误，仍然抛出
+                    throw error;
                 });
             allFilePromises.push(promise);
         };
@@ -2493,7 +2501,8 @@ if (IS_HEADER) {
         //     return Promise.reject(reason);
         // });
 
-        const promises = [imageTemplateManager.preload(), soundManager.preload()];
+        // const promises = [imageTemplateManager.preload(), soundManager.preload()];
+        const promises = [soundManager.preload()];
         //修改为在imageTemplateManager 和 soundManager 加载完毕后调用init
         Promise.all(promises).then(init, reason => {
             // console.log('资源文件加载失败');
