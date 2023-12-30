@@ -1,8 +1,3 @@
-/*
-此源码是基于 XgpNwb 的二次修改
-Github：https://github.com/NianBroken/Firework_Simulator
-Gitee：https://gitee.com/nianbroken/Firework_Simulator
-*/
 const Ticker = (function TickerFactory(window) {
     'use strict';
 
@@ -118,7 +113,7 @@ const Stage = (function StageFactory(window, document, Ticker) {
             pointerstart: [],
             pointermove: [],
             pointerend: [],
-            lastPointerPos: { x: 0, y: 0 },
+            lastPointerPos: {x: 0, y: 0},
         };
     }
 

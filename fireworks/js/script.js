@@ -1,8 +1,3 @@
-/*
-此源码是基于 XgpNwb 的二次修改
-Github：https://github.com/NianBroken/Firework_Simulator
-Gitee：https://gitee.com/nianbroken/Firework_Simulator
-*/
 'use strict';
 console.clear();
 
@@ -10,8 +5,9 @@ console.clear();
 //并且雪球远远超出了它的预期大小。有点笨重
 //读取/处理这个单独的文件，但不管怎样，它还是在这里:)
 
-//随机文字烟花内容
+//随机文字烟花内容，自定义文字烟花内容
 const randomWords = ['新年快乐(๑′ᴗ‵๑)', '(๑′ᴗ‵๑)❤', '万事如意 (๑′ᴗ‵๑)', '心想事成 (๑′ᴗ‵๑)', 'Happy New Year! (๑′ᴗ‵๑)'];
+
 const IS_MOBILE = window.innerWidth <= 640;
 const IS_DESKTOP = window.innerWidth > 800;
 const IS_HEADER = IS_DESKTOP && window.innerHeight < 300;
@@ -107,7 +103,7 @@ function toggleFullscreen() {
 //直接通过浏览器切换全屏模式，我们希望对此做出反应。
 //这个项目的语言由Nianbroken翻译成中文
 fscreen.addEventListener('fullscreenchange', () => {
-    store.setState({ fullscreen: isFullscreen() });
+    store.setState({fullscreen: isFullscreen()});
 });
 
 // 简单的状态容器
@@ -133,8 +129,8 @@ const store = {
             size: IS_DESKTOP
                 ? '3' // Desktop default
                 : IS_HEADER
-                ? '1.2' //配置文件头默认值(不必是int)
-                : '2', //手机默认
+                    ? '1.2' //配置文件头默认值(不必是int)
+                    : '2', //手机默认
             wordShell: true, //随机点阵烟花
             autoLaunch: true, //自动发射烟花
             finale: true, //同时放更多烟花
@@ -162,7 +158,7 @@ const store = {
     load() {
         const serializedData = localStorage.getItem('cm_fireworks_data');
         if (serializedData) {
-            const { schemaVersion, data } = JSON.parse(serializedData);
+            const {schemaVersion, data} = JSON.parse(serializedData);
 
             const config = this.state.config;
             switch (schemaVersion) {
@@ -236,23 +232,23 @@ function togglePause(toggle) {
     }
 
     if (paused !== newValue) {
-        store.setState({ paused: newValue });
+        store.setState({paused: newValue});
     }
 }
 
 function toggleSound(toggle) {
     if (typeof toggle === 'boolean') {
-        store.setState({ soundEnabled: toggle });
+        store.setState({soundEnabled: toggle});
     } else {
-        store.setState({ soundEnabled: !store.state.soundEnabled });
+        store.setState({soundEnabled: !store.state.soundEnabled});
     }
 }
 
 function toggleMenu(toggle) {
     if (typeof toggle === 'boolean') {
-        store.setState({ menuOpen: toggle });
+        store.setState({menuOpen: toggle});
     } else {
-        store.setState({ menuOpen: !store.state.menuOpen });
+        store.setState({menuOpen: !store.state.menuOpen});
     }
 }
 
@@ -438,7 +434,7 @@ function renderApp(state) {
     appNodes.menuInnerWrap.style.opacity = state.openHelpTopic ? 0.12 : 1;
     appNodes.helpModal.classList.toggle('active', !!state.openHelpTopic);
     if (state.openHelpTopic) {
-        const { header, body } = helpContent[state.openHelpTopic];
+        const {header, body} = helpContent[state.openHelpTopic];
         appNodes.helpModalHeader.textContent = header;
         appNodes.helpModalBody.textContent = body;
     }
@@ -483,7 +479,7 @@ const updateConfigNoEvent = () => updateConfig();
 appNodes.quality.addEventListener('input', updateConfigNoEvent);
 appNodes.shellType.addEventListener('input', updateConfigNoEvent);
 appNodes.shellSize.addEventListener('input', updateConfigNoEvent);
-appNodes.wordShell.addEventListener("click", ()=>setTimeout(updateConfig, 0));
+appNodes.wordShell.addEventListener("click", () => setTimeout(updateConfig, 0));
 appNodes.autoLaunch.addEventListener('click', () => setTimeout(updateConfig, 0));
 appNodes.finaleMode.addEventListener('click', () => setTimeout(updateConfig, 0));
 appNodes.skyLighting.addEventListener('input', updateConfigNoEvent);
@@ -499,16 +495,16 @@ appNodes.scaleFactor.addEventListener('input', () => {
 Object.keys(nodeKeyToHelpKey).forEach(nodeKey => {
     const helpKey = nodeKeyToHelpKey[nodeKey];
     appNodes[nodeKey].addEventListener('click', () => {
-        store.setState({ openHelpTopic: helpKey });
+        store.setState({openHelpTopic: helpKey});
     });
 });
 
 appNodes.helpModalCloseBtn.addEventListener('click', () => {
-    store.setState({ openHelpTopic: null });
+    store.setState({openHelpTopic: null});
 });
 
 appNodes.helpModalOverlay.addEventListener('click', () => {
-    store.setState({ openHelpTopic: null });
+    store.setState({openHelpTopic: null});
 });
 
 //常数导数
@@ -538,6 +534,7 @@ function randomColorSimple() {
 
 // 得到一个随机的颜色根据一些定制选项
 let lastColor;
+
 function randomColor(options) {
     const notSame = options && options.notSame;
     const notColor = options && options.notColor;
@@ -576,17 +573,20 @@ function whiteOrGold() {
 
 // Shell helpers
 function makePistilColor(shellColor) {
-    return shellColor === COLOR.White || shellColor === COLOR.Gold ? randomColor({ notColor: shellColor }) : whiteOrGold();
+    return shellColor === COLOR.White || shellColor === COLOR.Gold ? randomColor({notColor: shellColor}) : whiteOrGold();
 }
 
 // 唯一的 shell 类型
 const crysanthemumShell = (size = 1) => {
     const glitter = Math.random() < 0.25;
     const singleColor = Math.random() < 0.72;
-    const color = singleColor ? randomColor({ limitWhite: true }) : [randomColor(), randomColor({ notSame: true })];
+    const color = singleColor ? randomColor({limitWhite: true}) : [randomColor(), randomColor({notSame: true})];
     const pistil = singleColor && Math.random() < 0.42;
     const pistilColor = pistil && makePistilColor(color);
-    const secondColor = singleColor && (Math.random() < 0.2 || color === COLOR.White) ? pistilColor || randomColor({ notColor: color, limitWhite: true }) : null;
+    const secondColor = singleColor && (Math.random() < 0.2 || color === COLOR.White) ? pistilColor || randomColor({
+        notColor: color,
+        limitWhite: true
+    }) : null;
     const streamers = !pistil && color !== COLOR.White && Math.random() < 0.42;
     let starDensity = glitter ? 1.1 : 1.25;
     if (isLowQuality) starDensity *= 0.8;
@@ -612,7 +612,7 @@ const ghostShell = (size = 1) => {
     // Ghost effect can be fast, so extend star life
     shell.starLife *= 1.5;
     // Ensure we always have a single color other than white
-    let ghostColor = randomColor({ notColor: COLOR.White });
+    let ghostColor = randomColor({notColor: COLOR.White});
     // Always use streamers, and sometimes a pistil
     shell.streamers = true;
     const pistil = Math.random() < 0.42;
@@ -628,7 +628,7 @@ const ghostShell = (size = 1) => {
 };
 
 const strobeShell = (size = 1) => {
-    const color = randomColor({ limitWhite: true });
+    const color = randomColor({limitWhite: true});
     return {
         shellSize: size,
         spreadSize: 280 + size * 92,
@@ -678,7 +678,7 @@ const ringShell = (size = 1) => {
 };
 
 const crossetteShell = (size = 1) => {
-    const color = randomColor({ limitWhite: true });
+    const color = randomColor({limitWhite: true});
     return {
         shellSize: size,
         spreadSize: 300 + size * 100,
@@ -698,7 +698,7 @@ const floralShell = (size = 1) => ({
     starDensity: 0.12,
     starLife: 500 + size * 50,
     starLifeVariation: 0.5,
-    color: Math.random() < 0.65 ? 'random' : Math.random() < 0.15 ? randomColor() : [randomColor(), randomColor({ notSame: true })],
+    color: Math.random() < 0.65 ? 'random' : Math.random() < 0.15 ? randomColor() : [randomColor(), randomColor({notSame: true})],
     floral: true,
 });
 
@@ -777,6 +777,7 @@ function shellFromConfig(size) {
 //注意，只有在配置中选择了“随机”shell时，这才是随机的。
 //还有，这不创建烟花，只返回工厂函数。
 const fastShellBlacklist = ['Falling Leaves', 'Floral', 'Willow'];
+
 function randomFastShell() {
     const isRandom = shellNameSelector() === 'Random';
     let shellName = isRandom ? randomShellName() : shellNameSelector();
@@ -826,21 +827,21 @@ function init() {
     appNodes.shellSize.innerHTML = options;
 
     setOptionsForSelect(appNodes.quality, [
-        { label: '低', value: QUALITY_LOW },
-        { label: '正常', value: QUALITY_NORMAL },
-        { label: '高', value: QUALITY_HIGH },
+        {label: '低', value: QUALITY_LOW},
+        {label: '正常', value: QUALITY_NORMAL},
+        {label: '高', value: QUALITY_HIGH},
     ]);
 
     setOptionsForSelect(appNodes.skyLighting, [
-        { label: '不', value: SKY_LIGHT_NONE },
-        { label: '暗', value: SKY_LIGHT_DIM },
-        { label: '正常', value: SKY_LIGHT_NORMAL },
+        {label: '不', value: SKY_LIGHT_NONE},
+        {label: '暗', value: SKY_LIGHT_DIM},
+        {label: '正常', value: SKY_LIGHT_NORMAL},
     ]);
 
     // 0.9 is mobile default
     setOptionsForSelect(
         appNodes.scaleFactor,
-        [0.5, 0.62, 0.75, 0.9, 1.0, 1.5, 2.0].map(value => ({ value: value.toFixed(2), label: `${value * 100}%` }))
+        [0.5, 0.62, 0.75, 0.9, 1.0, 1.5, 2.0].map(value => ({value: value.toFixed(2), label: `${value * 100}%`}))
     );
 
     // Begin simulation
@@ -1050,6 +1051,7 @@ function seqSmallBarrage() {
 
     return 3400 + barrageCount * 120;
 }
+
 seqSmallBarrage.cooldown = 15000;
 seqSmallBarrage.lastCalled = Date.now();
 
@@ -1058,6 +1060,7 @@ const sequences = [seqRandomShell, seqTwoRandom, seqTriple, seqPyramid, seqSmall
 let isFirstSeq = true;
 const finaleCount = 32;
 let currentFinaleCount = 0;
+
 //随机生成一个烟花序列
 function startSequence() {
     if (isFirstSeq) {
@@ -1336,7 +1339,7 @@ function update(frameTime, lag) {
 }
 
 function render(speed) {
-    const { dpr } = mainStage;
+    const {dpr} = mainStage;
     const width = stageW;
     const height = stageH;
     const trailsCtx = trailsStage.ctx;
@@ -1431,8 +1434,9 @@ function render(speed) {
 
 // Draw colored overlay based on combined brightness of stars (light up the sky!)
 // Note: this is applied to the canvas container's background-color, so it's behind the particles
-const currentSkyColor = { r: 0, g: 0, b: 0 };
-const targetSkyColor = { r: 0, g: 0, b: 0 };
+const currentSkyColor = {r: 0, g: 0, b: 0};
+const targetSkyColor = {r: 0, g: 0, b: 0};
+
 function colorSky(speed) {
     // The maximum r, g, or b value that will be used (255 would represent no maximum)
     const maxSkySaturation = skyLightingSelector() * 15;
@@ -1542,7 +1546,7 @@ function getImgTemplateDots() {
             //接近或者等于白色跳出循环
             if (r > 200 && g > 200 && b > 200) continue;
             // 在轮廓数组中创建一个点，并记录坐标
-            dots.push({ x: x, y: y });
+            dots.push({x: x, y: y});
         }
     }
 
@@ -1557,12 +1561,12 @@ function getImgTemplateDots() {
  * 用于创建球形粒子爆发的辅助对象。
  *
  * @param  {Number} count               所需的恒星/粒子数量。该值是一个建议，而创建的爆发可能有更多的粒子。目前的算法无法完美地
- *										在球体表面均匀分布特定数量的点。
+ *                                        在球体表面均匀分布特定数量的点。
  * @param  {Function} particleFactory   每生成一颗星/粒子调用一次。传递了两个参数:
- * 										`angle `:恒星/粒子的方向。
- * 										`speed `:粒子速度的倍数，从0.0到1.0。
+ *                                        `angle `:恒星/粒子的方向。
+ *                                        `speed `:粒子速度的倍数，从0.0到1.0。
  * @param  {Number} startAngle=0        对于分段爆发，只能生成部分粒子弧。这
- *										允许设置起始圆弧角度(弧度)。
+ *                                        允许设置起始圆弧角度(弧度)。
  * @param  {Number} arcLength=TAU       弧的长度(弧度)。默认为整圆。
  *
  * @return {void}              不返回任何内容；由“particleFactory”使用给定的数据。
@@ -1602,10 +1606,10 @@ function createBurst(count, particleFactory, startAngle = 0, arcLength = PI_2) {
  *
  * @param {string} wordText  文字内容
  * @param {Function} particleFactory 每生成一颗星/粒子调用一次。传递参数:
- * 		                             `point `:恒星/粒子的起始位置_相对于canvas。
- *              					 `color `:粒子颜色。
- * @param {number} center_x 	爆炸中心点x
- * @param {number} center_y  	爆炸中心点y
+ *                                     `point `:恒星/粒子的起始位置_相对于canvas。
+ *                                 `color `:粒子颜色。
+ * @param {number} center_x    爆炸中心点x
+ * @param {number} center_y    爆炸中心点y
  */
 function createWordBurst(wordText, particleFactory, center_x, center_y) {
     //将点阵坐标转换为canvas坐标
@@ -1621,7 +1625,7 @@ function createWordBurst(wordText, particleFactory, center_x, center_y) {
         const point = map.points[i];
         let x = center_x + (point.x - dcenterX);
         let y = center_y + (point.y - dcenterY);
-        particleFactory({ x, y }, color, strobed, strobeColor);
+        particleFactory({x, y}, color, strobed, strobeColor);
     }
 }
 
@@ -1638,7 +1642,7 @@ function createImgBurst(particleFactory, center_x, center_y) {
         const point = map.points[i];
         let x = center_x + (point.x - dcenterX);
         let y = center_y + (point.y - dcenterY);
-        particleFactory({ x, y }, color, strobed, strobeColor);
+        particleFactory({x, y}, color, strobed, strobeColor);
     }
 }
 
@@ -2264,7 +2268,8 @@ const Spark = {
 
 //音效管理器
 const soundManager = {
-    baseURL: './audio/',
+    // baseURL: './audio/',
+    baseURL: 'https://cdn.jsdelivr.net/gh/BNTang/cdnRepository@45a794ce63e75dc0b108c2776528475cf3249a67/fireworks/audio/',
     ctx: new (window.AudioContext || window.webkitAudioContext)(),
     sources: {
         lift: {
@@ -2314,7 +2319,7 @@ const soundManager = {
         const types = Object.keys(this.sources);
         types.forEach(type => {
             const source = this.sources[type];
-            const { fileNames } = source;
+            const {fileNames} = source;
             const filePromises = [];
             fileNames.forEach(fileName => {
                 const fileURL = this.baseURL + fileName;
@@ -2422,42 +2427,38 @@ const soundManager = {
 
 //图片管理器
 const imageTemplateManager = {
-    baseURL: './images/template/',
+    // baseURL: './images/template/',
+    baseURL: 'https://cdn.jsdelivr.net/gh/BNTang/cdnRepository@45a794ce63e75dc0b108c2776528475cf3249a67/fireworks/images/template/',
     sources: [],
     preload() {
-        //从 1.png 开始加载 直到 请求到404 为止，转为Image添加到sources
-        let i = 1;
+        let i = 0;
         const allFilePromises = [];
         const load = () => {
             const fileURL = this.baseURL + i + '.png';
-            try {
-                const promise = fetch(fileURL)
-                    .then(response => {
-                        if (response.status >= 200 && response.status < 300) {
-                            return response;
-                        }
-                        const customError = new Error(response.statusText);
-                        customError.response = response;
-                        throw customError;
-                    })
-                    .then(response => response.blob())
-                    .then(data => {
-                        const image = new Image();
-                        image.src = URL.createObjectURL(data);
-                        this.sources.push(image);
-                        i++;
-                        // 判断如果图片加载成功，继续请求下一张图片
-                        // 否则结束循环
-                        load();
-                    })
-                    .catch(() => {
-                        return;
-                    });
-                allFilePromises.push(promise);
-            } catch (error) {}
+            const promise = fetch(fileURL)
+                .then(response => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response;
+                    }
+                    const customError = new Error(response.statusText);
+                    customError.response = response;
+                    throw customError;
+                })
+                .then(response => response.blob())
+                .then(data => {
+                    const image = new Image();
+                    image.src = URL.createObjectURL(data);
+                    this.sources.push(image);
+                    i++;
+
+                    load();
+                });
+            allFilePromises.push(promise);
         };
         load();
-        return Promise.all(allFilePromises);
+        return Promise.all(allFilePromises).catch(() => {
+            // 在这里处理错误，而不是在每个单独的promise中
+        });
     },
     randomSource() {
         if (this.sources.length == 0) return null;
@@ -2492,10 +2493,10 @@ if (IS_HEADER) {
         //     return Promise.reject(reason);
         // });
 
-        var promises = [imageTemplateManager.preload(), soundManager.preload()];
+        const promises = [imageTemplateManager.preload(), soundManager.preload()];
         //修改为在imageTemplateManager 和 soundManager 加载完毕后调用init
         Promise.all(promises).then(init, reason => {
-            console.log('资源文件加载失败');
+            // console.log('资源文件加载失败');
             init();
             return Promise.reject(reason);
         });

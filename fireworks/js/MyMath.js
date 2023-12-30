@@ -1,8 +1,3 @@
-/*
-此源码是基于 XgpNwb 的二次修改
-Github：https://github.com/NianBroken/Firework_Simulator
-Gitee：https://gitee.com/nianbroken/Firework_Simulator
-*/
 const MyMath = (function MyMathFactory(Math) {
     const MyMath = {};
 
@@ -59,14 +54,14 @@ const MyMath = (function MyMathFactory(Math) {
     };
 
     /**
-	 * 文字转点阵
-	 * @param {string} text 文本内容
-	 * @param {number} density 点阵密度默认3
-	 * @param {string} fontWeight 字体粗细 默认bold
-	 * @param {string} fontFamily 字体 默认Georgia
-	 * @param {string} fontSize 字体大小 默认60px
-	 * @returns {Array} 点阵数组
-	 */
+     * 文字转点阵
+     * @param {string} text 文本内容
+     * @param {number} density 点阵密度默认3
+     * @param {string} fontWeight 字体粗细 默认bold
+     * @param {string} fontFamily 字体 默认Georgia
+     * @param {string} fontSize 字体大小 默认60px
+     * @returns {Array} 点阵数组
+     */
     MyMath.literalLattice = function literalLattice(text, density = 3, fontWeight = 'bold', fontFamily = 'Georgia', fontSize = '60px') {
         // 创建一个空的点阵数组
         var dots = [];
@@ -88,17 +83,17 @@ const MyMath = (function MyMathFactory(Math) {
         // 获取画布上的像素数据
         var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
 
-		for (var y = 0; y < imageData.height; y += density) {
-			for (var x = 0; x < imageData.width; x += density) {
-				var i = (y * imageData.width + x) * 4;
-				// 如果像素的alpha值大于0，则表示该像素是文本的一部分
-				if (imageData.data[i + 3] > 0) {
-					// 在轮廓数组中创建一个点，并记录坐标
-					dots.push({ x: x, y: y });
-				}
-			}
-		}
-          
+        for (var y = 0; y < imageData.height; y += density) {
+            for (var x = 0; x < imageData.width; x += density) {
+                var i = (y * imageData.width + x) * 4;
+                // 如果像素的alpha值大于0，则表示该像素是文本的一部分
+                if (imageData.data[i + 3] > 0) {
+                    // 在轮廓数组中创建一个点，并记录坐标
+                    dots.push({x: x, y: y});
+                }
+            }
+        }
+
         // //清除画布,将dots 中的每个点绘制到画布上
         // ctx.clearRect(0, 0, canvas.width, canvas.height);
         // ctx.fillStyle = 'red';
@@ -115,12 +110,12 @@ const MyMath = (function MyMathFactory(Math) {
         // window.open().document.body.appendChild(img);
 
         //canvas 导出为图片
-        
+
 
         return {
-            width:canvas.width,
-            height:canvas.height,
-            points:dots
+            width: canvas.width,
+            height: canvas.height,
+            points: dots
         };
     };
 
